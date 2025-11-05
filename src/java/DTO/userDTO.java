@@ -10,7 +10,27 @@ public class userDTO {
     private String fullName;
     private String password;
     private java.sql.Date dateOfBirth;
+    private boolean isAdmin;
 
+    public userDTO(String userId, String userName, String email, String fullName, String password, Date dateOfBirth, boolean isAdmin) {
+        this.userId = userId;
+        this.userName = userName;
+        this.email = email;
+        this.fullName = fullName;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.isAdmin = isAdmin;
+    }
+
+    public boolean isIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
+    
     public String getUserId() {
         return userId;
     }
@@ -85,8 +105,10 @@ public class userDTO {
 
     @Override
     public String toString() {
-        return "userDTO{" + "userId=" + userId + ", userName=" + userName + ", email=" + email + ", fullName=" + fullName + ", password=" + password + ", dateOfBirth=" + dateOfBirth + '}';
+        return "userDTO{" + "userId=" + userId + ", userName=" + userName + ", email=" + email + ", fullName=" + fullName + ", password=" + password + ", dateOfBirth=" + dateOfBirth + ", isAdmin=" + isAdmin + '}';
     }
+
+   
 
 
 

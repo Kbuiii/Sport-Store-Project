@@ -3,206 +3,245 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Danh sách sản phẩm</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f5f6fa;
-                margin: 0;
-                padding: 0;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ - Cửa hàng thời trang</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+        }
 
-            h1 {
-                text-align: center;
-                margin-top: 20px;
-                color: #2c3e50;
-            }
+        /* Header */
+        .top-bar {
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+        }
 
-            /* Grid hiển thị sản phẩm */
-            .product-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 20px;
-                padding: 20px;
-                width: 90%;
-                margin: auto;
-            }
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            background-color: #0056b3;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
 
-            .product {
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                padding: 15px;
-                text-align: center;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-                transition: transform 0.2s, box-shadow 0.2s;
-            }
+        .top-bar a:hover {
+            background-color: #003d80;
+        }
 
-            .product:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            }
+        /* Category bar */
+        .category-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background-color: white;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
 
-            .product img {
-                width: 100%;
-                height: 200px;
-                object-fit: cover;
-                border-radius: 8px;
-                background-color: #eee;
-            }
+        .category-bar a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: #f1f1f1;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
 
-            .product h4 {
-                margin: 10px 0 5px;
-                color: #007bff;
-            }
+        .category-bar a:hover,
+        .category-bar a.active {
+            background-color: #007bff;
+            color: white;
+        }
 
-            .product p {
-                margin: 5px 0;
-                color: #555;
-            }
+        /* Search bar */
+        .search-container {
+            text-align: center;
+            margin: 25px 0;
+        }
 
-            .product-price {
-                font-weight: bold;
-                color: #d9534f;
-                font-size: 18px;
-            }
+        .search-container input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            outline: none;
+        }
 
-            .empty {
-                text-align: center;
-                margin-top: 50px;
-                color: #888;
-            }
-            .category-bar {
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 15px;
-                background-color: #fff;
-                padding: 10px 0;
-                border-bottom: 1px solid #ddd;
-            }
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
 
-            .category-bar a {
-                text-decoration: none;
-                color: #333;
-                padding: 8px 16px;
-                border-radius: 5px;
-                transition: all 0.2s;
-                font-weight: bold;
-            }
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
 
-            .category-bar a:hover {
-                background-color: #007bff;
-                color: white;
-            }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 10px;
+        }
 
-            .category-bar a.active {
-                background-color: #007bff;
-                color: white;
-            }
-            .search-container {
-                text-align: center;
-                margin: 20px 0;
-            }
+        /* Product grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            width: 90%;
+            margin: auto;
+        }
 
-            .search-container input[type="text"] {
-                width: 300px;
-                padding: 8px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-            }
+        .product {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-            .search-container button {
-                padding: 8px 16px;
-                font-size: 16px;
-                background-color: #007bff;
-                color: white;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                margin-left: 5px;
-            }
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
 
-            .search-container button:hover {
-                background-color: #0056b3;
-            }
-        </style>
-    </head>
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+        }
 
-    <body>
+        .product h4 {
+            color: #007bff;
+            margin: 10px 0 5px;
+        }
 
-        <!-- Thanh trên cùng -->
-        <div style="text-align: right; background-color: #fff; padding: 10px 20px; border-bottom: 1px solid #ddd;">
-            <a href="login.jsp"
-               style="text-decoration: none; color: white; background-color: #007bff;
-               padding: 8px 16px; border-radius: 5px; font-weight: bold;">
-                Đăng nhập
-            </a>
+        .product-price {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            margin-top: 50px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #f8f9fa;
+            padding: 15px 0;
+            margin-top: 30px;
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="top-bar">
+        <div>
+            <strong style="font-size:18px;">🛍️ Fashion Store</strong>
         </div>
-        <!-- Thanh category -->
-        <<form action="categoryController" method="get" style="text-align:center; margin:20px 0;">
-            <div class="category-bar">
-                <a href="categoryController" 
-                   class="${empty selectedCategory ? 'active' : ''}">Tất cả</a>
-                <c:forEach var="c" items="${listC}">
-                    <a href="categoryController?cid=${c.categoryId}" 
-                       class="${selectedCategory == c.categoryId ? 'active' : ''}">
-                        ${c.categoryName}
+        <div>
+            <c:if test="${sessionScope.user != null}">
+                <c:if test="${sessionScope.user.isAdmin==true}">
+                <a href="adminDashboard.jsp" >Admin Dashboard,</a>
+                </c:if>
+                <span>Xin chào, <b>${sessionScope.user.fullName}</b>!</span>
+                <a href="mainController?txtAction=logout">Đăng xuất</a>
+            </c:if>
+            <c:if test="${sessionScope.user == null}">
+                <a href="login.jsp">Đăng nhập</a>
+            </c:if>
+        </div>
+    </div>
+
+    <!-- Category -->
+    <form action="categoryController" method="get">
+        <div class="category-bar">
+            <a href="categoryController" class="${empty selectedCategory ? 'active' : ''}">Tất cả</a>
+            <c:forEach var="c" items="${listC}">
+                <a href="categoryController?cid=${c.categoryId}" 
+                   class="${selectedCategory == c.categoryId ? 'active' : ''}">
+                    ${c.categoryName}
+                </a>
+            </c:forEach>
+        </div>
+    </form>
+
+    <!-- Search -->
+    <div class="search-container">
+        <form action="searchController" method="get">
+            <input value="${txtS}" type="text" name="txtSearchProduct" placeholder="Nhập tên sản phẩm...">
+            <button type="submit">🔍 Tìm kiếm</button>
+        </form>
+    </div>
+
+    <h1>Danh sách sản phẩm</h1>
+
+    <c:choose>
+        <c:when test="${not empty listP}">
+            <div class="product-grid">
+                <c:forEach var="p" items="${listP}">
+                    <a href="detailController?pid=${p.productId}" style="text-decoration:none; color:inherit;">
+                        <div class="product">
+                            <c:choose>
+                                <c:when test="${not empty p.image}">
+                                    <img src="data:image/jpeg;base64,${p.image}" alt="${p.productName}">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="https://via.placeholder.com/250x200?text=No+Image" alt="No image">
+                                </c:otherwise>
+                            </c:choose>
+                            <h4>${p.productName}</h4>
+                            <p class="product-price">
+                                <fmt:formatNumber value="${p.price}" type="number" groupingUsed="true"/> VND
+                            </p>
+                            <p>Màu: ${p.color}</p>
+                            <p>Size: ${p.size}</p>
+                            <p>Tồn kho: ${p.quantity}</p>
+                        </div>
                     </a>
                 </c:forEach>
             </div>
-        </form>
 
-        <!-- ✅ Thanh tìm kiếm sản phẩm -->
-        <div class="search-container">
-            <form action="searchController" method="get">
-                <input value="${txtS}" type="text" name="txtSearchProduct" placeholder="Nhập tên sản phẩm..." value="${param.txtSearchProduct}">
-                <button type="submit">Tìm kiếm</button>
-            </form>
-        </div>
+            <h3 style="text-align:center;">Tổng cộng: ${fn:length(listP)} sản phẩm</h3>
+        </c:when>
 
+        <c:otherwise>
+            <div class="empty">
+                <h3>Không có sản phẩm nào để hiển thị.</h3>
+            </div>
+        </c:otherwise>
+    </c:choose>
 
-        <h1>Danh sách sản phẩm</h1>
+    <footer>
+        © 2025 Fashion Store — Made with ❤️ by Cao Trí
+    </footer>
 
-        <c:choose>
-            <c:when test="${not empty listP}">
-                <div class="product-grid">
-                    <c:forEach var="p" items="${listP}">
-                        <a href="detailController?pid=${p.productId}" style="text-decoration:none; color:inherit;">
-                            <div class="product">
-                                <c:choose>
-                                    <c:when test="${not empty p.image}">
-                                        <img src="data:image/jpeg;base64,${p.image}" alt="${p.productName}">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img src="https://via.placeholder.com/250x200?text=No+Image" alt="No image">
-                                    </c:otherwise>
-                                </c:choose>
-                                <h4>${p.productName}</h4>
-                                <p class="product-price">
-                                <fmt:formatNumber value="${p.price}" type="number" groupingUsed="true"/> VND
-                                </p>
-                                <p>Màu: ${p.color}</p>
-                                <p>Size: ${p.size}</p>
-                                <p>Tồn kho: ${p.quantity}</p>
-                            </div>
-                        </a>
-                    </c:forEach>
-                </div>
-
-                <h3 style="text-align:center;">
-                    Tổng cộng: ${fn:length(listP)} sản phẩm
-                </h3>
-            </c:when>
-
-            <c:otherwise>
-                <div class="empty">
-                    <h3>Không có sản phẩm nào để hiển thị.</h3>
-                </div>
-            </c:otherwise>
-        </c:choose>
-    </body>
+</body>
 </html>

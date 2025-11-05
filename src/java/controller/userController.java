@@ -55,13 +55,15 @@ public class userController extends HttpServlet {
         if (!checkLogin) {
             msg = "Username or password incorrect!";
         } else {
+            user = userDAO.getUserById(txtUsername);
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(600);
+            session.setAttribute("user", user);
             request.setAttribute("user", user);
             request.getRequestDispatcher("homeController").forward(request, response);
             return;
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
         request.setAttribute("msg", msg);
 
         request.getRequestDispatcher(url).forward(request, response);
@@ -70,8 +72,8 @@ public class userController extends HttpServlet {
     private void processLogout(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.invalidate(); // Huy tat ca nhung cai dang co trong session
-        response.sendRedirect("login.jsp");
+        session.removeAttribute("user"); // Huy tat ca nhung cai dang co trong session
+        response.sendRedirect("homeController");
     }
 
     private void processRegister(HttpServletRequest request, HttpServletResponse response)
@@ -129,6 +131,8 @@ public class userController extends HttpServlet {
             processLogin(request, response);
         } else if (action.equals("register")) {
             processRegister(request, response);
+        } else if (action.equals("logout")) {
+            processLogout(request, response);
         }
     }
 

@@ -38,10 +38,12 @@ public class homeController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         productDAO pdao = new productDAO();
         List<productDTO> listP = pdao.getALlProduct();
-
+        
         categoryDAO cdao = new categoryDAO();
         List<categoryDTO> listC = cdao.getAllCategories();
-
+        
+       
+        
         request.setAttribute("listC", listC);
         request.setAttribute("listP", listP);
         request.getRequestDispatcher("home.jsp").forward(request, response);

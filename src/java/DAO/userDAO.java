@@ -38,8 +38,8 @@ public class userDAO {
                 user.setFullName(rs.getString("userFullname"));
                 user.setPassword(rs.getString("userPassword"));
                 user.setDateOfBirth(rs.getDate("dateOfBirth"));
+                user.setIsAdmin(rs.getBoolean("isAdmin"));
             }
-
             rs.close();
             pst.close();
             conn.close();
@@ -112,7 +112,7 @@ public class userDAO {
         userDTO user = null;
         try {
             Connection conn = DbUtils.getConnection();
-            String sql = "SELECT * FROM tblUser WHERE userName = ?";
+            String sql = "SELECT * FROM tblUser WHERE userName = '?'";
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, userName);
 
@@ -126,7 +126,7 @@ public class userDAO {
                 user.setFullName(rs.getString("userFullname"));
                 user.setPassword(rs.getString("userPassword"));
                 user.setDateOfBirth(rs.getDate("dateOfBirth"));
-                return user;
+                user.setIsAdmin(rs.getBoolean("isAdmin"));
             }
 
             rs.close();
@@ -136,12 +136,12 @@ public class userDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return user;
     }
 
     public static void main(String[] args) {
-        userDAO dao = new userDAO();
-      
-        System.out.println();
+       userDAO dao = new userDAO();
+       userDTO u = dao.getUserById("admin");
+        System.out.println(u);
     }
 }

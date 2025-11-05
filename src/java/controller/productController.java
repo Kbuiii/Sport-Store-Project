@@ -4,9 +4,11 @@
  */
 package controller;
 
+import DAO.productDAO;
+import DTO.productDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +19,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name = "mainController", urlPatterns = {"/mainController"})
-public class mainController extends HttpServlet {
+@WebServlet(name = "productController", urlPatterns = {"/productController"})
+public class productController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,36 +31,37 @@ public class mainController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    protected void loadAllProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
+        productDAO dao = new productDAO();
+        List<productDTO> ListP = dao.getALlProduct();
+
+        request.setAttribute("listP", ListP);
+        request.getRequestDispatcher("managerProduct.jsp").forward(request, response);
+
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String txtAction = request.getParameter("txtAction");
-        String url = "home.jsp";
+        loadAllProduct(request, response);
+    }
 
         
 
-        if (txtAction.equals("search")) {
-            url = "searchController";
-        } else if (txtAction.equals("login")||txtAction.equals("register")) {
-            url = "userController";
-        } else if (txtAction.equals("logout")) {
-            url = "userController";
-        }
-
-        request.getRequestDispatcher(url).forward(request, response);
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+/**
+ * Handles the HTTP <code>GET</code> method.
+ *
+ * @param request servlet request
+ * @param response servlet response
+ * @throws ServletException if a servlet-specific error occurs
+ * @throws IOException if an I/O error occurs
+ */
+@Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -72,7 +75,7 @@ public class mainController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -83,8 +86,9 @@ public class mainController extends HttpServlet {
      * @return a String containing servlet description
      */
     @Override
-    public String getServletInfo() {
+public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
+}// </editor-fold>
 
-}
+
