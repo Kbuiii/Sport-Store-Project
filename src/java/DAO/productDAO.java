@@ -114,6 +114,7 @@ public class productDAO {
         }
         return p;
     }
+ 
 
     public List<productDTO> searchByName(String txtSearch) {
         List<productDTO> list = new ArrayList<>();

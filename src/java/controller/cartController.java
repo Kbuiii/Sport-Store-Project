@@ -6,15 +6,12 @@ package controller;
 
 import DAO.cartDAO;
 import DAO.cartItemDAO;
-import DAO.productDAO;
+import DTO.cartDTO;
 import DTO.cartItemDTO;
-import DTO.productDTO;
 import DTO.userDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.nio.file.Files.size;
 import java.util.List;
-import static javafx.scene.paint.Color.color;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,8 +23,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
-@WebServlet(name = "detailController", urlPatterns = {"/detailController"})
-public class detailController extends HttpServlet {
+@WebServlet(name = "cartController", urlPatterns = {"/cartController"})
+public class cartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,17 +35,40 @@ public class detailController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
+    protected void loadCartByUserId(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String userId = request.getParameter("userId");
+        cartItemDAO dao = new cartItemDAO();
+        List<cartItemDTO> list = dao.getAllItemsByUserId(userId);
+        request.setAttribute("listP", list);
+        request.getRequestDispatcher("cartDetail.jsp").forward(request, response);
 
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String pid = request.getParameter("pid");
-        productDAO pdao = new productDAO();
-        productDTO p = pdao.getProductById(pid);
-        request.setAttribute("detail", p);
-        request.getRequestDispatcher("detail.jsp").forward(request, response);
+//        loadCartByUserId(request, response);
+        HttpSession session = request.getSession();
+        userDTO user = (userDTO) session.getAttribute("user");
+
+        if (user == null) {
+            // Nếu chưa đăng nhập -> chuyển về trang login
+            response.sendRedirect("login.jsp");
+            return;
+        }
+
+        try {
+            cartItemDAO dao = new cartItemDAO();
+            List<cartItemDTO> list = dao.getAllItemsByUserId(user.getUserId());
+            request.setAttribute("listP", list);
+            request.getRequestDispatcher("cartDetail.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("msg", "Lỗi khi tải giỏ hàng: " + e.getMessage());
+            request.getRequestDispatcher("cartDetail.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

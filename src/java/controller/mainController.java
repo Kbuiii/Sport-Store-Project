@@ -34,6 +34,7 @@ public class mainController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String txtAction = request.getParameter("txtAction");
 
+
         String url = "homeController";
 
         if (txtAction != null) {
@@ -44,6 +45,7 @@ public class mainController extends HttpServlet {
             } else if (txtAction.equals("logout")) {
                 url = "userController";
             }
+
         }
 
         request.getRequestDispatcher(url).forward(request, response);
