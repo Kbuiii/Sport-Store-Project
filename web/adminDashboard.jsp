@@ -13,13 +13,17 @@
         </h1>
         <br/>
         <h1>
-           <a href="productController" >managerProduct</a>
+            <a href="productController" >managerProduct</a>
         </h1>
         <br/>
         <h1>
-            managerProduct
+            <a href="managerCategoryController">addCategory</a>
         </h1>
         <br/>
+        <hr>
+        <a href="mainController" class="btn btn-primary mt-3">🏠 Quay lại Trang chủ</a>
 
     </body>
+</html>
+</body>
 </html>
