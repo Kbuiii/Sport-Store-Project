@@ -172,6 +172,7 @@
                 <a href="adminDashboard.jsp" >Admin Dashboard,</a>
                 </c:if>
                 <span>Xin chào, <b>${sessionScope.user.fullName}</b>!</span>
+                <a href="mainController?txtAction=viewCart&userId=${sessionScope.user.userId}" >Xem gio hang</a>
                 <a href="mainController?txtAction=logout">Đăng xuất</a>
             </c:if>
             <c:if test="${sessionScope.user == null}">

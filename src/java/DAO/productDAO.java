@@ -74,6 +74,7 @@ public class productDAO {
 
         return null;
     }
+ 
 
     public List<productDTO> searchByName(String txtSearch) {
         List<productDTO> list = new ArrayList<>();

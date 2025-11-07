@@ -4,15 +4,23 @@
  */
 package controller;
 
+import DAO.cartDAO;
+import DAO.cartItemDAO;
 import DAO.productDAO;
+import DTO.cartItemDTO;
 import DTO.productDTO;
+import DTO.userDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.nio.file.Files.size;
+import java.util.List;
+import static javafx.scene.paint.Color.color;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -30,15 +38,17 @@ public class detailController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+   
+
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       String pid= request.getParameter("pid");
-       
-       productDAO pdao = new productDAO();
-       productDTO p = pdao.getProductById(pid);
-       request.setAttribute("detail", p);
-       request.getRequestDispatcher("detail.jsp").forward(request, response);
+        String pid = request.getParameter("pid");
+        productDAO pdao = new productDAO();
+        productDTO p = pdao.getProductById(pid);
+        request.setAttribute("detail", p);
+        request.getRequestDispatcher("detail.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

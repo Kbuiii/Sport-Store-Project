@@ -4,9 +4,9 @@
  */
 package controller;
 
+import DAO.cartItemDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Admin
  */
-@WebServlet(name = "mainController", urlPatterns = {"/mainController"})
-public class mainController extends HttpServlet {
+@WebServlet(name = "removeFromCartController", urlPatterns = {"/removeFromCartController"})
+public class removeFromCartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,22 +32,18 @@ public class mainController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String txtAction = request.getParameter("txtAction");
-        String url = "home.jsp";
-
-        if (txtAction.equals("search")) {
-            url = "searchController";
-        } else if (txtAction.equals("login")||txtAction.equals("register")) {
-            url = "userController";
-        } else if (txtAction.equals("logout")) {
-            url = "userController";
-        }else if (txtAction.equals("viewCart")) {
-            url = "cartController";
-        }else if (txtAction.equals("addToCart")){
-            url = "detailController";
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet removeFromCartController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet removeFromCartController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-
-        request.getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -76,7 +72,19 @@ public class mainController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
+
+            cartItemDAO dao = new cartItemDAO();
+            dao.deleteCartItem(cartItemId);
+
+            // Sau khi xóa, quay lại giỏ hàng
+            response.sendRedirect("cartController");
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("msg", "Không thể xóa sản phẩm khỏi giỏ hàng: " + e.getMessage());
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
     }
 
     /**
